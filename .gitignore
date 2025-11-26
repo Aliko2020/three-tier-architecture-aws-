@@ -1,0 +1,51 @@
+# ======================
+# Node / React projects
+# ======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+.env
+dist/
+build/
+*.log
+
+# ======================
+# Terraform
+# ======================
+*.tfstate
+*.tfstate.*
+.crash
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+
+# ======================
+# IDE and OS files
+# ======================
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# ======================
+# Server-specific
+# ======================
+server/node_modules/
+server/.env
+
+# ======================
+# Frontend-specific
+# ======================
+frontend/node_modules/
+frontend/.env
+frontend/dist/
+frontend/build/
+
+# ======================
+# Scripts or utilities
+# ======================
+scripts/node_modules/
