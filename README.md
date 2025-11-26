@@ -39,7 +39,10 @@
 - Associated **EC2 security group**.
 - Verified SSH access:
 
-```bash
-chmod 400 ecommerse.pem
-ssh -i "ecommerse.pem" ec2-user@<EC2_PUBLIC_IP>
+bash
+- chmod 400 ecommerse.pem
+- ssh -i "ecommerse.pem" ec2-user@<EC2_PUBLIC_IP>
+
+
 ![SSH LOGIN / GIT & NODEJS INSTALLED](images/ssh.png)
+
