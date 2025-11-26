@@ -14,6 +14,36 @@ resource "aws_internet_gateway" "main_gw" {
   }
 }
 
+resource "aws_subnet" "rds_private_1" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.rds_private_1
+  availability_zone = "us-east-1a"
+
+  tags = { Name = "rds-private-1" }
+}
+
+resource "aws_subnet" "rds_private_2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.rds_private_2
+  availability_zone = "us-east-1b"
+
+  tags = { Name = "rds-private-2" }
+}
+
+
+resource "aws_db_subnet_group" "rds" {
+  name       = "rds-subnet-group"
+  subnet_ids = [
+    aws_subnet.rds_private_1.id,
+    aws_subnet.rds_private_2.id
+  ]
+
+  tags = {
+    Name = "rds-subnet-group"
+  }
+}
+
+
 resource "aws_subnet" "server_sn" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.server_cidr_block
@@ -23,14 +53,6 @@ resource "aws_subnet" "server_sn" {
   }
 }
 
-resource "aws_subnet" "rds_sn" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.rds_cidr_block
-
-  tags = {
-    Name     = "Main_private_sn"
-  }
-}
 
 resource "aws_route_table" "public_route_table" {
   vpc_id      = aws_vpc.main.id
@@ -54,10 +76,17 @@ resource "aws_route_table" "private_route_table" {
   }
 }
 
-resource "aws_route_table_association" "private_association" {
-  subnet_id      = aws_subnet.rds_sn.id
+resource "aws_route_table_association" "private_association_1" {
+  subnet_id      = aws_subnet.rds_private_1.id
   route_table_id = aws_route_table.private_route_table.id
 }
+
+resource "aws_route_table_association" "private_association_2" {
+  subnet_id      = aws_subnet.rds_private_2.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
+
 
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2_sg"
@@ -92,11 +121,11 @@ resource "aws_security_group" "rds_sg" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
-    security_groups = [aws_security_group.ec2_sg.id]
-  }
+  from_port       = 5432
+  to_port         = 5432
+  protocol        = "tcp"
+  security_groups = [aws_security_group.ec2_sg.id]
+}
 
   egress {
     from_port   = 0
