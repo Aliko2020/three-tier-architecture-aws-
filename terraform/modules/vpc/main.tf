@@ -2,7 +2,7 @@ resource "aws_vpc" "main" {
   cidr_block = var.cidr_block
 
   tags = {
-    Name     = "ecommerce"
+    Name = "ecommerce"
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_subnet" "rds_private_2" {
 
 
 resource "aws_db_subnet_group" "rds" {
-  name       = "rds-subnet-group"
+  name = "rds-subnet-group"
   subnet_ids = [
     aws_subnet.rds_private_1.id,
     aws_subnet.rds_private_2.id
@@ -49,15 +49,15 @@ resource "aws_subnet" "server_sn" {
   cidr_block = var.server_cidr_block
 
   tags = {
-    Name     = "Main_public_sn"
+    Name = "Main_public_sn"
   }
 }
 
 
 resource "aws_route_table" "public_route_table" {
-  vpc_id      = aws_vpc.main.id
+  vpc_id = aws_vpc.main.id
 
-  route  {
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.main_gw.id
   }
@@ -69,9 +69,9 @@ resource "aws_route_table_association" "public_association" {
 }
 
 resource "aws_route_table" "private_route_table" {
-   vpc_id        = aws_vpc.main.id
+  vpc_id = aws_vpc.main.id
 
-   tags = {
+  tags = {
     Name = "private_rt"
   }
 }
@@ -106,6 +106,14 @@ resource "aws_security_group" "ec2_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 
   egress {
     from_port   = 0
@@ -115,17 +123,18 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
+
 resource "aws_security_group" "rds_sg" {
   name        = "rds_sg"
   description = "Allow DB access from EC2"
   vpc_id      = aws_vpc.main.id
 
   ingress {
-  from_port       = 5432
-  to_port         = 5432
-  protocol        = "tcp"
-  security_groups = [aws_security_group.ec2_sg.id]
-}
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ec2_sg.id]
+  }
 
   egress {
     from_port   = 0

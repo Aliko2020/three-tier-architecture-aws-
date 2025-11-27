@@ -1,28 +1,30 @@
 import { ArrowRight } from "lucide-react";
+import { NavLink } from "react-router-dom";
+
 
 export const CategorySection = () => {
   const categories = [
     {
       title: "Laptops",
-      image: "/images/laptop.png", 
-      link: "/laptops",
+      image: "/images/laptop.png",
+      path: "/laptops",
     },
     {
       title: "Desktops",
       image: "/images/desktop.png",
-      link: "/desktops",
+      path: "/desktops",
     },
     {
       title: "Accessories",
       image: "/images/accessories.png",
-      link: "/accessories",
+      path: "/accessories",
     },
   ];
 
   return (
     <section className="py-8 bg-white">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {categories.map(({ title, image, link }) => (
+        {categories.map(({ title, image, path }) => (
           <div
             key={title}
             className="min-w-[320px] min-h-[360px] relative group border overflow-hidden rounded-lg  hover:shadow-sm transition-shadow duration-300 bg-white"
@@ -40,12 +42,13 @@ export const CategorySection = () => {
                 {title.split(" ")[0]} <br />
                 <span className="text-gray-800">{title.split(" ")[1]}</span>
               </h3>
-              <a
-                href={link}
+              <NavLink
+                to={path}
                 className="mt-2 inline-flex items-center text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors"
               >
-                SHOP<ArrowRight size={14} className="ml-1" />
-              </a>
+                SHOP <ArrowRight size={14} className="ml-1" />
+              </NavLink>
+
             </div>
           </div>
         ))}

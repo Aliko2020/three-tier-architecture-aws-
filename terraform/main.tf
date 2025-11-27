@@ -22,3 +22,8 @@ module "rds_setup" {
   db_password            = var.db_password
 }
 
+module "s3_hosting" {
+  source = "./modules/s3"
+  bucket_name    = "my-react-website-12345"
+  
+}

@@ -15,7 +15,7 @@ const ProtectedRoute = ({ children }) => {
         }
 
         axios
-        axios.get("http://localhost:3000/api/auth/verify", {
+        axios.get("http://44.200.162.125:3000/api/auth/verify", {
             headers: { Authorization: `Bearer ${token}` },
         })
 
