@@ -1,8 +1,10 @@
-# EC2 / VPC — Night Log
+# EC2 / VPC Setup & React + Node.js Deployment
 
 **Date:** 2025-11-25  
 **Author:** Amos  
 
+This repository documents the steps taken to deploy a full-stack e-commerce website using AWS (EC2, RDS, S3) and Terraform.
+- Public endpoint: http://my-react-website-12345.s3-website-us-east-1.amazonaws.com
 ---
 
 ## 1. VPC and Networking
@@ -25,7 +27,7 @@
   - Inbound: HTTP (80) and SSH (22) from anywhere.
   - Outbound: All traffic allowed.
 - **RDS security group (`rds_sg`)**
-  - Inbound: MySQL (3306) only from EC2 security group.
+  - Inbound: PostgreSQL (5432) only from EC2 security group.
   - Outbound: All traffic allowed.
 - **Passed security groups between modules** using Terraform outputs/inputs.
 
@@ -37,12 +39,33 @@
 - Assigned **public IP** for SSH access.
 - Attached **key pair (`ecommerse.pem`)**.
 - Associated **EC2 security group**.
-- Verified SSH access:
+- Installed **Node.js (v18)** and **npm**.
+- Installed **PM2** for keeping the server running in the background.
+- Started backend Node.js server:
 
 bash
-- chmod 400 ecommerse.pem
-- ssh -i "ecommerse.pem" ec2-user@<EC2_PUBLIC_IP>
+npm install
+pm2 start index.js --name my-server
+pm2 status
 
+curl -X POST http://localhost:3000/api/auth/signup \
+-H "Content-Type: application/json" \
+-d '{"username":"alice","email":"alice@example.com","password":"mypassword"}'
 
-![SSH LOGIN / GIT & NODEJS INSTALLED](images/ssh.png)
+ Response:
+ {"message":"User registered successfully"}
+
+## 4. PostgreSQL (RDS)
+
+- Connected to RDS PostgreSQL (private subnet) from EC2.
+- Verified database tables (users) exist.
+- Ran test queries for user registration and password hashing.
+- Ensured database credentials were stored in .env and accessed by Node.js.
+
+## 5. Amazon S3 Hosting — React Website
+---
+- Created an S3 bucket named `my-react-website-12345`.
+- Enabled **static website hosting**.
+  Public endpoint: http://my-react-website-12345.s3-website-us-east-1.amazonaws.com
+
 
