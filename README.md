@@ -121,6 +121,26 @@ The frontend React application is hosted using S3 static website hosting.
 S3 Configuration
 - Bucket name: my-react-website-12345
 
-    Public access for static assets enabled
+## Future Improvements
 
-    index.html configured as the root document
+Infrastructure Improvements
+
+- Add Application Load Balancer (ALB) in front of EC2 backend
+- Implement Auto Scaling Group for backend high availability
+- Migrate static assets to CloudFront CDN for global performance
+- Add Redis (ElastiCache) for caching layer
+
+Security Improvements
+- Restrict SSH using bastion host or SSM Session Manager
+- Add database encryption and automated backups tuning
+
+Terraform Improvements
+- Add full CI/CD pipeline for Terraform (GitHub Actions)
+- Store state in Terraform Cloud or S3 with DynamoDB locking
+- Convert architecture to multi-environment (dev/stage/prod)
+
+Application Improvements
+- Add monitoring using CloudWatch dashboards & alarms
+- Implement logging using CloudWatch Logs or OpenSearch
+- Containerize backend with Docker + ECS/Fargatedex.html configured as the root document
+
